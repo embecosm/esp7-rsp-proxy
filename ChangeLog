@@ -1,0 +1,27 @@
+		      GNU Debugger RSP Dummy in SystemC
+		      =================================
+
+$$
+
+9-Apr-2009  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+
+	* AUTHORS, ChangeLog, configure.ac, COPYING, INSTALL, Makefile.am,
+	* NEWS, OrpsocMain.cpp, README, doc/config.texi, doc/fdl-1.2.texi,
+	* doc/Makefile.am, doc/rsp-dummy.texi, example/doxygen.config,
+	* example/example-doxygen.pdf, example/hello, example/hello.c,
+	* example/mainpage, example/Makefile, example/Makefile.am,
+	* example/or1k.cfg, example/start.s, example/utils.c,
+	* example/utils.h, src/GdbServer.cpp, src/GdbServer.h,
+	* src/Makefile.am, src/MemoryBlock.cpp, src/MemoryBlock.h,
+	* src/MpHash.cpp, src/MpHash.h, src/Register.cpp, src/Register.h,
+	* src/RspConnection.cpp, src/RspConnection.h, src/RspDummyMain.cpp,
+	* src/RspDummyMain.h, src/RspPacket.cpp, src/RspPacket.h,
+	* src/SimProc.cpp, src/SimProc.h, src/Utils.cpp,
+	* src/Utils.h: Initial versions created.
+
+
+COPYING
+=======
+
+This software is licensed under the GNU General Public License (GPL). Full
+details of the GPL can be found in the file COPYING

@@ -1,0 +1,307 @@
+\input texinfo   @c -*- texinfo -*-
+@c Embecosm RSP Dummy Server Manual
+@c
+@c Copyright (C) 2009 Embecosm Limited
+@c
+@c Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
+@c
+@c This file is part of the dummy GDB RSP server in SystemC
+@c
+@c This program is free software; you can redistribute it and/or modify it
+@c under the terms of the GNU General Public License as published by the Free
+@c Software Foundation; either version 3 of the License, or (at your option)
+@c any later version.
+@c
+@c This program is distributed in the hope that it will be useful, but WITHOUT
+@c ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+@c FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+@c more details.
+@c
+@c You should have received a copy of the GNU General Public License along
+@c with this program.  If not, see <http://www.gnu.org/licenses/>.
+@c
+@c $Id$
+@c
+@setfilename rsp-dummy.info
+@afourpaper
+@include version.texi
+@include config.texi
+@dircategory Embedded development
+@direntry
+* Rsp-dummy: The Embecosm RSP Dummy Server
+@end direntry
+
+@copying
+This file documents the Embecosm RSP Dummy Server, @value{RSPDUMMY}.
+
+Copyright @copyright{} 2009 Embecosm Limited.
+
+@quotation
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.2 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with no Front-Cover Texts, and with no Back-Cover
+Texts.  A copy of the license is included in the section entitled ``GNU
+Free Documentation License''.
+@end quotation
+@end copying
+
+@setchapternewpage on
+@settitle The Embecosm RSP Dummy User Guide
+
+@syncodeindex fn cp
+@syncodeindex vr cp
+
+@titlepage
+@title The Embecosm RSP Dummy User Guide
+@author Jeremy Bennett
+@author Embecosm Limited
+@author Issue 1 for @value{RSPDUMMY} @value{VERSION}
+
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+     
+Published by Embecosm Limited
+@end titlepage
+
+@contents
+
+@node Top
+@c Perhaps this should be the title of the document (but only for info,
+@c not for TeX).  Existing GNU manuals seem inconsistent on this point.
+@top Scope of this Document
+
+This document is the user guide for @value{RSPDUMMY}, the Embecosm RSP
+Dummy Server.
+
+@menu
+* About::
+* Installation::
+* Usage::
+* Configuration::
+
+* GNU Free Documentation License::  The license for this documentation
+* Index::
+@end menu
+
+@node About
+@chapter About the Embecosm RSP Dummy Server
+
+@value{RSPDUMMY} provides a server interface to allow GNU Debugger
+clients for remote targets (typical of the embedded world) to be tested
+before the actual target is available.
+
+Typically such targets are provided as models or interfaces to real
+silicon, and availability of a working target is the limiting step on
+delivery. The @value{RSPDUMMY} allows the maximum testing to be carried
+out before the target is available, thus reducing time to delivery.
+
+@value{RSPDUMMY} models the target as a bank of registers and one or
+more banks of (non-overlapping) memory. This is initialized from a
+configuration file and then accessed and modified through any RSP
+packets which access registers or memory.
+
+If the user requests, full tracing of packets can be enabled.
+
+@node Installation
+@chapter Installation
+@cindex installing @value{RSPDUMMY}
+
+Installation follows standard GNU protocols.
+
+@menu
+* Preparation::
+* Configuring the Build::
+* Build and Install::
+* Known Issues::
+@end menu
+
+@node Preparation
+@section Preparation
+
+Unpack the software and create a @emph{separate} directory in which to
+build it:
+
+@example
+@kbd{tar jxf rsp-dummy-@value{VERSION}.tar.bz2}
+@kbd{mkdir builddir_rsp-dummy}
+@kbd{cd builddir_rsp-dummy}
+@end example
+
+@node Configuring the Build
+@section Configuring the Build
+
+Configure the software using the @command{configure} script in the
+main directory.
+
+There several options available, all of which are standard
+to GNU @command{configure} scripts. Use @kbd{configure --help} to see
+all the options. The most useful is @code{--prefix} to specify a
+directory for installation of the tools.
+
+@node Build and Install
+@section Building and Installing
+The tool is then built with:
+
+@example
+@kbd{make all}
+@kbd{make install}
+@end example
+
+The main installation directory should have been specified using
+@code{--prefix} at configuration time. These commands will install the
+@value{RSPDUMMY} tool in the @file{bin} sub-directory, 
+the example in the @file{share} sub-directory and this documentation in
+@command{info} format in the @file{share/info} sub-directory.
+
+@quotation Note
+Testing @value{RSPDUMMY} with @kbd{make check} is not yet supported.
+@end quotation
+
+The documentation may be created and installed in alternative formats (PDF,
+Postscript, DVI, HTML) with for example:
+
+@example
+@kbd{make pdf}
+@kbd{make install-pdf}
+@end example
+
+@node Known Issues
+@section Known Problems and Issues
+
+The following problems and issues are known about with @value{RSPDUMMY}
+@value{VERSION}. Notify other issues by email to
+@url{mailto:support@@embecosm.com}.
+
+@itemize @bullet
+@item
+There is no check that all the registers have been specified.
+
+@end itemize
+
+@node Usage
+@chapter Usage
+@cindex running @value{RSPDUMMY}
+
+The general form of the command is:
+
+@example
+rsp-dummy @var{config-file} @var{port} [trace]
+@end example
+
+The @var{config-file} is a file specifying the initial configuration of
+the dummy. The port is the TCP/IP port on which the server should
+listen. If the optional final @code{trace} argument is specified, the
+server will report on each RSP packet it sends and receives.
+
+@node Configuration
+@chapter Configuration
+@cindex configuring @value{RSPDUMMY}
+
+The configuration file describes an initial state of the CPU registers
+and Memory. Its syntax is:
+
+@multitable {@var{memoryClauseList}} {->} {@var{memoryClause} | @var{memoryClause} @var{memoryClauseList}}
+
+@item @var{description}
+@tab -> 
+@tab @var{nameClause} @var{registerClause} @var{memoryClauseList}
+
+@item @var{nameClause}
+@tab ->
+@tab @code{NAME} @code{(} @var{nameParams} @code{)}
+
+@item @var{nameParams}
+@tab ->
+@tab @var{string} @code{,} @var{endianness}
+
+@item @var{endianness}
+@tab ->
+@tab @code{LITTLE ENDIAN} | @code{BIG ENDIAN}
+
+@item @var{registerClause}
+@tab ->
+@tab @code{REGISTERS} @code{(} @var{number} @code{)} @var{registerList}
+
+@item @var{registerList}
+@tab ->
+@tab @var{register} | @var{register} @var{registerList}
+
+@item @var{register}
+@tab ->
+@tab @code{@{} @var{string} @code{,} @var{number} @code{,} @var{number} @code{@}}
+
+@item @var{memoryClauseList}
+@tab ->
+@tab @var{memoryClause} | @var{memoryClause} @var{memoryClauseList}
+
+@item @var{memoryClause}
+@tab ->
+@tab @var{byteMemoryClause} | @var{wordMemoryClause}
+
+@item @var{byteMemoryClause}
+@tab ->
+@tab @code{BYTE MEMORY} @code{(} @var{memoryParams} @code{)} @var{memoryValues}
+
+@item @var{wordMemoryClause}
+@tab ->
+@tab @code{WORD MEMORY} @code{(} @var{memoryParams} @code{)} @var{memoryValues}
+
+@item @var{memoryParams}
+@tab ->
+@tab @var{number} @code{,} @var{number}
+
+@item @var{memoryValues}
+@tab ->
+@tab @var{number} | @var{number} @code{,} @var{memoryValues}
+
+@end multitable
+
+Comments are introduced by @code{//} and last to the end of line C++
+style.
+
+The @code{NAME} clause is used to specify the name of the configuration
+and its endianness.
+
+The @code{REGISTERS} clause specifies the number of registers. This is
+then followed by the description of each register in turn as a triplet
+specified between braces (@code{@{}) and (@code{@}}), giving the name of
+the register, its size in bits (up to 64) and an initial value. Any
+registers which are not specified will have invalid values, so will lead
+to subsequent errors.
+
+The @code{BYTE MEMORY} and @code{WORD MEMORY} clauses specify blocks of
+memory. In the former case, initial values are provided as bytes, in the
+latter as words - which is why the endianness has to be specified. The
+clause specifies a start address and a size @emph{which is always in
+bytes}.
+
+The memory clause is then followed by the initial values in bytes or
+words as appropriate. It is not necessary to specify values for all the
+bytes or words. Unspecified entries will be left uninitialized.
+
+Strings (for the @code{NAME} clause and as names of registers are
+specified by surrounding by matching pairs of single (@code{'}) or
+double (@code{"}) quotes.
+
+Numbers may be specified in any of the usual C integer formats, and
+additionally using the @code{0h} prefix for hexadecimal, @code{0d} for
+decimal, @code{0o} for octal and @code{0b} for binary.
+
+An example configuration file, @file{or1k.cfg} may be found in the
+@file{share} directory of the installation.
+
+@node  GNU Free Documentation License
+@chapter GNU Free Documentation License
+@cindex license for @value{RSPDUMMY}
+
+@include fdl-1.2.texi
+
+@node Index
+
+@unnumbered Index
+
+@printindex cp
+
+@bye

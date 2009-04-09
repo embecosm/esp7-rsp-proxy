@@ -1,0 +1,16 @@
+		    GDB Cycle Accurate Interface to ORPSoC
+		    ======================================
+
+$Id$
+
+
+NEWS
+====
+
+First version published 4 April, 2009.
+
+COPYING
+=======
+
+This software is licensed under the GNU General Public License (GPL). Full
+details of the GPL can be found in the file COPYING

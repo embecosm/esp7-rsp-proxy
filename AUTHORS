@@ -1,0 +1,18 @@
+		      GNU Debugger RSP Dummy in SystemC
+		      =================================
+
+$Id$
+
+
+AUTHORS
+=======
+
+Jeremy Bennett <jeremy.bennett@embecosm.com> is founder and Chief Executive of
+Embecosm Limited, a company providing services and developing open source
+tools for embedded software development.
+
+COPYING
+=======
+
+This software is licensed under the GNU General Public License (GPL). Full
+details of the GPL can be found in the file COPYING

@@ -1,0 +1,22 @@
+		    GDB Cycle Accurate Interface to ORPSoC
+		    ======================================
+
+$Id$
+
+
+ABOUT
+=====
+
+This is a dummy RSP server. It allows GDB clients to test their capability of
+reading and writing memory over RSP.
+
+INSTALLATION
+============
+
+No installation is required.
+
+COPYING
+=======
+
+This software is licensed under the GNU General Public License (GPL). Full
+details of the GPL can be found in the file COPYING
