@@ -4,7 +4,7 @@
 #
 # Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 #
-# This file is part of OpenRISC 1000 Architectural Simulator.
+# This file is part of the Embecosm Proxy GDB RSP Server.
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the Free
