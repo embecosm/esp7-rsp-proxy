@@ -1,11 +1,11 @@
 # ----------------------------------------------------------------------------
-# Boot loader for example Program for testing the RSP Dummy Server
+# Boot loader for example Program for testing the Proxy RSP Server
 
 # Copyright (C) 2009  Embecosm Limited
 
 # Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
-# This file is part of the dummy GDB RSP server in SystemC
+# This file is part of the Embcosm Proxy GDB RSP server.
  
 # This program is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Lesser General Public License as published by

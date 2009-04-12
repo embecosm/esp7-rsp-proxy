@@ -1,11 +1,11 @@
 /*! @file
  *
- *  @mainpage Example Program for the Embecosm RSP Dummy Server
+ *  @mainpage Example Program for the Embecosm Proxy GDB RSP Server
  *
  *  @section intro_sec About
  *
  *  This is a simple program which can be compiled with the OpenRISC 1000
- *  toolchain to create a binary image compatible with the RSP Dummy Server
+ *  toolchain to create a binary image compatible with the Proxy RSP Server
  *  configuration file "or1k.cfg".
  *
  *  @section install_sec Installation
