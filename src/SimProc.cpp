@@ -122,8 +122,26 @@ SimProc::init (const char *filename)
       const char *err = (1 == parseErrorCount) ? "error" : "errors";
       cerr << parseErrorCount << " " << err << " found" << endl;
       cerr << "Terminating execution" << endl;
+
+      return  false;
     }
+
+  return  true;
+
 }	// init ()
+
+
+//-----------------------------------------------------------------------------
+//! Identify whether this is a little endian architecture.
+
+//! @return  true if this is a little endian architecture, false otherwise.
+//-----------------------------------------------------------------------------
+bool
+SimProc::isLittleEndian ()
+{
+  return  isLittleEndianP;
+
+}	// isLittleEndian ()
 
 
 //-----------------------------------------------------------------------------
@@ -329,10 +347,12 @@ SimProc::parse ()
   cout << "-- parse" << endl;
 #endif
 
+  lineNumber        = 1;
   parseWarningCount = 0;
   parseErrorCount   = 0;
 
-  ch = -1;				// Init the char reader
+  ch     = -1;				// Init the char reader
+  nextCh = -1;				// No call to unreadChar () yet
   readChar ();
 
   scan ();				// Get the first lexeme
@@ -1380,7 +1400,7 @@ SimProc::parseMessage (const char *preamble,
   va_start (args, format);
   snprintf (mess, MAX_PARSER_ERR_SIZE, format, args);
 
-  cerr << preamble << mess << endl;
+  cerr << lineNumber << ": " << preamble << mess << endl;
 
 }	// parserMessage ()
 
@@ -1844,6 +1864,8 @@ SimProc::readWord ()
 
 //-----------------------------------------------------------------------------
 //! Update the next character to be analysed.
+
+//! Updates the line number count
 //-----------------------------------------------------------------------------
 void
 SimProc::readChar ()
@@ -1851,6 +1873,13 @@ SimProc::readChar ()
   char  c;				// Character size I/O
 
   prevCh = ch;
+
+  if (-1 != nextCh)
+    {
+      ch     = nextCh;			// We had an unreadch
+      nextCh = -1;
+    }
+
   if (fh->get (c))
     {
       ch = c;				// Char to int
@@ -1860,10 +1889,16 @@ SimProc::readChar ()
       ch = -1;				// Marks EOF
     }
 
+  if ('\n' == ch)			// Up the line number count
+    {
+      lineNumber++;
+    }
 }	// readChar ()
 
 //-----------------------------------------------------------------------------
 //! Revert the next character to be analysed.
+
+//! Cannot affect the line number count.
 
 //! @note This can only be called once between calls to readChar (). It is an
 //!       error if readChar () has yet to be called (when ::prevCh will be -1).
@@ -1877,6 +1912,12 @@ SimProc::unreadChar ()
     }
   else
     {
-      ch = prevCh;
+      nextCh = ch;			// Save to use again
+      ch     = prevCh;			// Restore old ch
+    }
+
+  if ('\n' == nextCh)			// Reduce the line number count
+    {
+      lineNumber--;
     }
 }	// unreadChar ()

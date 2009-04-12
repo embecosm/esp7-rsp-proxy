@@ -69,9 +69,13 @@ main (int   argc,
       traceOnP = false;
     }
 
-  // The simulator
+  // The simulator. Give up if initialization fails
   SimProc *cpu = new SimProc (traceOnP);
-  cpu->init (configFile);
+
+  if(!cpu->init (configFile))
+    {
+      exit (127);
+    }
 
   // The RSP server
   GdbServer *gdbServer = new GdbServer (port, cpu);

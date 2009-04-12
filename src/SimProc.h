@@ -56,6 +56,7 @@ public:
   bool  init (const char *filename);
 
   // Various public accessor functions
+  bool  isLittleEndian ();
   bool  isTraceOn ();
   int   getNumRegs ();
   bool  isValidReg (int  regNum);
@@ -115,6 +116,12 @@ private:
 
   //! The previous ch considered. -1 is start of file.
   int  prevCh;
+
+  //! The saved ch if we have just done an unreadChar (). Otherwise -1.
+  int  nextCh;
+
+  //! The line number of ch
+  int  lineNumber;
 
   //! Largest size of a lexeme (including EOS character)
   static const int  LEXEME_MAX = 256;

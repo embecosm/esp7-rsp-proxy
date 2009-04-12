@@ -24,7 +24,14 @@
 
 // $Id$
 
+#include <iostream>
+
 #include "Utils.h"
+
+
+using std::cout;
+using std::hex;
+using std::endl;
 
 
 //-----------------------------------------------------------------------------
@@ -81,27 +88,48 @@ Utils::hex2Char (uint8_t  d)
 //! Convert a value to a hex digit string
 
 //! The supplied value is converted to a (numBytes * 2) digit hex string. The
-//! string is null terminated for convenience. The hex string follows the
-//! universal printing convention: most significant digit on the left.
+//! string is null terminated for convenience.
 
-//! @param[in]  val  The value to convert
-//! @param[out] buf  The buffer for the text string
-//! @param[in]  numBytes The number of significant bytes in val
+//! Rather bizarrely, GDB seems to expect the bytes in the string to be
+//! ordered according to target endianism
+
+//! @param[in]  val              the value to convert
+//! @param[out] buf              the buffer for the text string
+//! @param[in]  numBytes         the number of significant bytes in val
+//! @param[in]  isLittleEndianP  true if this is a little endian architecture.
 //-----------------------------------------------------------------------------
 void
 Utils::val2Hex (uint64_t  val,
 		char     *buf,
-		int       numBytes)
+		int       numBytes,
+		bool      isLittleEndianP)
 {
-  int  numDigits = numBytes * 2;
-
-  for (int  n = numDigits - 1; n >= 0; n--)
+  if (isLittleEndianP)
     {
-      buf[n] = hex2Char (val & 0xf);
-      val /= 16;
+      for (int  n = 0 ; n < numBytes; n++)
+	{
+	  unsigned char  byte = val & 0xff;
+	  
+	  buf [n * 2    ] = hex2Char ((byte >> 4) & 0xf);
+	  buf [n * 2 + 1] = hex2Char ( byte       & 0xf);
+	  
+	  val = val / 256;
+	}
+    }
+  else
+    {
+      for (int  n = numBytes - 1 ; n >= 0; n--)
+	{
+	  unsigned char  byte = val & 0xff;
+	  
+	  buf [n * 2    ] = hex2Char ((byte >> 4) & 0xf);
+	  buf [n * 2 + 1] = hex2Char ( byte       & 0xf);
+	  
+	  val = val / 256;
+	}
     }
 
-  buf[numDigits] = 0;			// Useful to terminate as string
+  buf[numBytes * 2] = '\0';		// Useful to terminate as string
 
 }	// val2Hex ()
 
@@ -109,25 +137,39 @@ Utils::val2Hex (uint64_t  val,
 //-----------------------------------------------------------------------------
 //! Convert a hex digit string to a register value
 
-//! The supplied (numBytes * 2) digit hex string follows the universal
-//! printing convention: most significant digit on the left. It is converted
-//! to a 64-bit value.
+//! The supplied (numBytes * 2) digit hex string
 
-//! @param[in] buf  The buffer with the hex string
-//! @param[in]  numBytes The number of significant bytes in val
+//! Rather bizarrely, GDB seems to expect the bytes in the string to be
+//! ordered according to target endianism
+
+//! @param[in] buf              the buffer with the hex string
+//! @param[in] numBytes         the number of significant bytes in val
+//! @param[in] isLittleEndianP  true if this is a little endian architecture.
 
 //! @return  The value to convert
 //-----------------------------------------------------------------------------
 uint64_t
 Utils::hex2Val (char *buf,
-		int   numBytes)
+		int   numBytes,
+		bool  isLittleEndianP)
 {
-  int       numDigits = numBytes * 2;
   uint64_t  val       = 0;		// The result
 
-  for (int  n = 0; n < numDigits; n++)
+  if (isLittleEndianP)
     {
-      val = val * 16 + char2Hex (buf[n]);
+      for (int  n = numBytes - 1; n >= 0; n--)
+	{
+	  val = val * 16 + char2Hex (buf[n * 2    ]);
+	  val = val * 16 + char2Hex (buf[n * 2 + 1]);
+	}
+    }
+  else
+    {
+      for (int  n = 0; n < numBytes; n++)
+	{
+	  val = val * 16 + char2Hex (buf[n * 2    ]);
+	  val = val * 16 + char2Hex (buf[n * 2 + 1]);
+	}
     }
 
   return val;

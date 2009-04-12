@@ -1,4 +1,3 @@
-// ----------------------------------------------------------------------------
 // GDB RSP server: implementation
 
 // Copyright (C) 2009  Embecosm Limited <info@embecosm.com>
@@ -344,7 +343,8 @@ GdbServer::rspReadAllRegs ()
 {
   int  pktSize = 0;
 
-  // The registers
+  // The registers. GDB client expects them to be packed according to target
+  // endianness.
   for (int  regNum = 0; regNum < cpu->getNumRegs (); regNum++)
     {
       int  bitSize;			// Size of reg in bits
@@ -356,7 +356,8 @@ GdbServer::rspReadAllRegs ()
 	  if (cpu->readReg (regNum, value))
 	    {
 	      int  byteSize = (bitSize + 7) /8;
-	      Utils::val2Hex (value, &(pkt->data[pktSize]), byteSize);
+	      Utils::val2Hex (value, &(pkt->data[pktSize]), byteSize,
+			      cpu->isLittleEndian());
 	      pktSize += byteSize * 2;	// 2 chars per hex digit
 	    }
 	}
@@ -388,7 +389,8 @@ GdbServer::rspWriteAllRegs ()
       if (cpu->getRegSize (r, bitSize))
 	{
 	  int  byteSize = (bitSize + 7) /8;
-	  int  value    = Utils::hex2Val (&(pkt->data[pktSize]), byteSize);
+	  int  value    = Utils::hex2Val (&(pkt->data[pktSize]), byteSize,
+					  cpu->isLittleEndian());
 	  pktSize += byteSize * 2;	// 2 chars per hex digit
 	    
 	  if (!cpu->writeReg (r, value))
@@ -554,7 +556,8 @@ GdbServer::rspReadReg ()
       return;
     }
 
-  // Get the relevant register
+  // Get the relevant register. GDB client expects them to be packed according
+  // to target endianness.
   if (cpu->isValidReg (regNum))
     {
       int  bitSize;			// Size of reg in bits
@@ -566,7 +569,8 @@ GdbServer::rspReadReg ()
 	  if (cpu->readReg (regNum, value))
 	    {
 	      int  byteSize = (bitSize + 7) /8;
-	      Utils::val2Hex (value, pkt->data, byteSize);
+	      Utils::val2Hex (value, pkt->data, byteSize,
+			      cpu->isLittleEndian());
 	    }
 	}
     }
@@ -619,7 +623,8 @@ GdbServer::rspWriteReg ()
       if (cpu->getRegSize (regNum, bitSize))
 	{
 	  int  byteSize = (bitSize + 7) /8;
-	  int  value    = Utils::hex2Val (valstr, byteSize);
+	  int  value    = Utils::hex2Val (valstr, byteSize,
+					  cpu->isLittleEndian());
 
 	  if (!cpu->writeReg (regNum, value))
 	    {

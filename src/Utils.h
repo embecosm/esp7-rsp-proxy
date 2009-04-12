@@ -43,9 +43,11 @@ public:
   static const char  hex2Char (uint8_t  d);
   static void        val2Hex (uint64_t  val,
 			      char     *buf,
-			      int       numBytes);
+			      int       numBytes,
+			      bool      isLittleEndianP);
   static uint64_t    hex2Val (char *buf,
-			      int   numBytes);
+			      int   numBytes,
+			      bool  isLittleEndianP);
   static void        ascii2Hex (char *dest,
 				char *src);
   static void        hex2Ascii (char *dest,
