@@ -6,7 +6,7 @@
 
 // Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
-// This file is part of the Embecosm Dummy RSP server.
+// This file is part of the Embecosm Proxy RSP server.
 
 // This program is free software: you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as published by
@@ -31,7 +31,7 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "RspDummyMain.h"
+#include "RspProxyMain.h"
 #include "SimProc.h"
 #include "GdbServer.h"
 
@@ -54,7 +54,7 @@ main (int   argc,
 
   if ((argc < 3) || (argc > 4))
     {
-      cerr << "Usage: rsp-dummy <config-file> <rsp-port> [trace]" << endl;
+      cerr << "Usage: rsp-proxy <config-file> <rsp-port> [trace]" << endl;
     }
 
   configFile = argv[1];

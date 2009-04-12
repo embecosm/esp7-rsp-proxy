@@ -5,7 +5,7 @@
 
 // Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
-// This file is part of the Embecosm Dummy RSP server.
+// This file is part of the Embecosm Proxy RSP server.
 
 // This program is free software: you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as published by
@@ -64,10 +64,10 @@ private:
   };
 
   //! Constant for a thread id
-  static const int  DUMMY_TID = 1;
+  static const int  PROXY_TID = 1;
 
   //! Constant for a trap instruction
-  static const uint8_t  DUMMY_TRAP_INSTR = 0xa5;
+  static const uint8_t  PROXY_TRAP_INSTR = 0xa5;
 
   //! Out associated simulated CPU
   SimProc  *cpu;

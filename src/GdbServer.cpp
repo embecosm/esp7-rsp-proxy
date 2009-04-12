@@ -4,7 +4,7 @@
 
 // Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
-// This file is part of the Embecosm Dummy RSP server.
+// This file is part of the Embecosm Proxy RSP server.
 
 // This program is free software: you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as published by
@@ -154,13 +154,13 @@ GdbServer::rspClientRequest ()
       return;
 
     case 'c':
-      // Continue. In this dummy we immediately report we have hit an
+      // Continue. In this proxy we immediately report we have hit an
       // exception.
       rspReportException ();
       return;
 
     case 'C':
-      // Continue with signal (in the packet). In this dummy we immediately
+      // Continue with signal (in the packet). In this proxy we immediately
       // report we have hit an exception.
       rspReportException ();
       return;
@@ -201,13 +201,13 @@ GdbServer::rspClientRequest ()
       return;
 
     case 'i':
-      // Single cycle step. In this dummy we immediately report we have hit an
+      // Single cycle step. In this proxy we immediately report we have hit an
       // exception.
       rspReportException ();
       return;
 
     case 'I':
-      // Single cycle step with signal. In this dummy we immediately report we
+      // Single cycle step with signal. In this proxy we immediately report we
       // have hit an exception.
       rspReportException ();
       return;
@@ -253,17 +253,17 @@ GdbServer::rspClientRequest ()
       return;
 
     case 'R':
-      // Restart the program being debugged. Nothing to do in the dummy.
+      // Restart the program being debugged. Nothing to do in the proxy.
       return;
 
     case 's':
-      // Single step one machine instruction. In this dummy we immediately
+      // Single step one machine instruction. In this proxy we immediately
       // report we have hit an exception.
       rspReportException ();
       return;
 
     case 'S':
-      // Single step one machine instruction with signal. In this dummy we
+      // Single step one machine instruction with signal. In this proxy we
       // immediately report we have hit an exception.
       rspReportException ();
       return;
@@ -313,7 +313,7 @@ GdbServer::rspClientRequest ()
 //! Send a packet acknowledging an exception has occurred
 
 //! This is sent immediately we continue or step in any way. The only signal
-//! we ever see in this implementation is a dummy trap.
+//! we ever see in this implementation is a proxy trap.
 //-----------------------------------------------------------------------------
 void
 GdbServer::rspReportException ()
@@ -660,8 +660,8 @@ GdbServer::rspQuery ()
     {
       // Return the current thread ID (unsigned hex). A null response
       // indicates to use the previously selected thread. We use the constant
-      // DUMMY_TID to represent our single thread of control.
-      sprintf (pkt->data, "QC%x", DUMMY_TID);
+      // PROXY_TID to represent our single thread of control.
+      sprintf (pkt->data, "QC%x", PROXY_TID);
       pkt->setLen (strlen (pkt->data));
       rsp->putPkt (pkt);
     }
@@ -675,8 +675,8 @@ GdbServer::rspQuery ()
   else if (0 == strcmp ("qfThreadInfo", pkt->data))
     {
       // Return info about active threads. We return just the constant
-      // DUMMY_TID to represent our single thread of control.
-      sprintf (pkt->data, "m%x", DUMMY_TID);
+      // PROXY_TID to represent our single thread of control.
+      sprintf (pkt->data, "m%x", PROXY_TID);
       pkt->setLen (strlen (pkt->data));
       rsp->putPkt (pkt);
     }
@@ -702,7 +702,7 @@ GdbServer::rspQuery ()
     }
   else if (0 == strcmp ("qOffsets", pkt->data))
     {
-      // Report any relocation. Not used in the dummy
+      // Report any relocation. Not used in the proxy
       pkt->packStr ("Text=0;Data=0;Bss=0");
       rsp->putPkt (pkt);
     }
@@ -895,8 +895,8 @@ GdbServer::rspVpkt ()
 
       // Restart the current program. However unlike a "R" packet, "vRun"
       // should behave as though it has just stopped. We use the
-      // DUMMY_SIGNAL_TRAP signal. Nothing to actually do for a restart with a
-      // dummy. 
+      // PROXY_SIGNAL_TRAP signal. Nothing to actually do for a restart with a
+      // proxy. 
       sprintf (pkt->data, "S%02d", TARGET_SIGNAL_TRAP);
       rsp->putPkt (pkt);
     }
@@ -1158,7 +1158,7 @@ GdbServer::rspRemoveMatchpoint ()
 //---------------------------------------------------------------------------*/
 //! Handle a RSP insert breakpoint or matchpoint request
 
-//! This does nothing with the dummy, but records that the matchpoint has been
+//! This does nothing with the proxy, but records that the matchpoint has been
 //! set up, so it can be correlated with later remove packets.
 //---------------------------------------------------------------------------*/
 void
@@ -1208,11 +1208,11 @@ GdbServer::rspInsertMatchpoint ()
 	    }
 	}
 
-      // Record the breakpoint and attempt to write a dummy marker (only one
+      // Record the breakpoint and attempt to write a proxy marker (only one
       // byte)
       mpHash->add (type, addr, instr);
 
-      if (cpu->writeMem (addr, DUMMY_TRAP_INSTR))
+      if (cpu->writeMem (addr, PROXY_TRAP_INSTR))
 	{
 	  if (cpu->isTraceOn ())
 	    {

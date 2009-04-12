@@ -6,7 +6,7 @@
 
 // Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
-// This file is part of the Embecosm Dummy RSP server.
+// This file is part of the Embecosm Proxy RSP server.
 
 // This program is free software: you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as published by
