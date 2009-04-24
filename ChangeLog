@@ -1,9 +1,16 @@
-		      GNU Debugger RSP Dummy in SystemC
-		      =================================
+		    Embecosm GNU Debugger Proxy RSP Server
+		    ======================================
 
-$$
+$Id$
 
-9-Apr-2009  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+12-Apr-2009  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+	* src/RspProxyMain.cpp, src/RspProxyMain.h: created by renaming
+	src/RspDummyMain.cpp and src/RspDummyMain.h respectively.
+	* src/RspDummyMain.cpp, src/RspDummyMain.h: Deleted
+	* doc/rsp-proxy.texi. Created by renaming doc/rsp-dummy.texi.
+	* doc/rsp-dummy.texi. Deleted.
+
+ 9-Apr-2009  Jeremy Bennett  <jeremy.bennett@embecosm.com>
 
 	* AUTHORS, ChangeLog, configure.ac, COPYING, INSTALL, Makefile.am,
 	* NEWS, OrpsocMain.cpp, README, doc/config.texi, doc/fdl-1.2.texi,

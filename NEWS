@@ -1,4 +1,4 @@
-		    GDB Cycle Accurate Interface to ORPSoC
+		    Embecosm GNU Debugger Proxy RSP Server
 		    ======================================
 
 $Id$
@@ -7,7 +7,9 @@ $Id$
 NEWS
 ====
 
-First version published 4 April, 2009.
+Version 1.0 published 12 April, 2009.
+
+Version 0.1 completed 4 April, 2009.
 
 COPYING
 =======

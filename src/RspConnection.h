@@ -37,23 +37,8 @@
 //-----------------------------------------------------------------------------
 //! Class implementing the RSP connection listener
 
-//! RSP requests received from TCP/IP are queued on the output FIFO for
-//! processing by the GDB server. Packets read from the input FIFO from the
-//! GDB server are sent back via TCP/IP.
-
-//! The packets are received serially, ie. a new packet is not sent until the
-//! previous ones have been dealt with. Some packets need no reply, so they
-//! will be sent one after the other. But for packets that need a reply (which
-//! may be one or several packets), new packets are not sent until the reply
-//! from the previous one is received.
-
-//! The upshot of this is that we can avoid any risk of deadlock by always
-//! giving priority to any outgoing reply packets.
-
-//! Two threads are used, one to listen for TCP/IP connections from the
-//! client, the other to look for FIFO packets from the GDB server to write
-//! back to the client. Both must be non-blocking in the SystemC sense
-//! (i.e. allow other SystemC threads to run).
+//! This class is entirely passive. It is up to the caller to determine that a
+//! packet will become available before calling ::getPkt ().
 //-----------------------------------------------------------------------------
 class RspConnection
 {

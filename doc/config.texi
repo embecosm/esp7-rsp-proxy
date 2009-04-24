@@ -1,10 +1,10 @@
-@c Embecosm RSP Dummy Server Manual configuration file.  
+@c Embecosm Proxy GDB RSP Server Manual configuration file.  
 @c
 @c Copyright (C) 2009 Embecosm Limited
 @c
 @c Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 @c
-@c This file is part of the dummy GDB RSP server in SystemC
+@c This file is part of the Embecosm Proxy GDB RSP server
 @c
 @c This program is free software; you can redistribute it and/or modify it
 @c under the terms of the GNU General Public License as published by the Free
@@ -29,5 +29,5 @@
 @c ----------------------------------------------------------------------
 @c STRINGS:
 @c
-@c Name of the Or1ksim program
-@set RSPDUMMY  rsp-dummy
+@c Name of the Proxy RSP Server program
+@set RSPPROXY  rsp-proxy

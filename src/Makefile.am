@@ -4,7 +4,7 @@
 #
 # Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 #
-# This file is part of the dummy GDB RSP server in SystemC
+# This file is part of the Embecosm Proxy GDB RSP server.
 # 
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the Free
@@ -20,9 +20,9 @@
 # with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-bin_PROGRAMS = rsp-dummy
+bin_PROGRAMS = rsp-proxy
 
-rsp_dummy_SOURCES = GdbServer.cpp     \
+rsp_proxy_SOURCES = GdbServer.cpp     \
                     GdbServer.h       \
                     MemoryBlock.cpp   \
                     MemoryBlock.h     \
@@ -32,8 +32,8 @@ rsp_dummy_SOURCES = GdbServer.cpp     \
                     Register.h        \
                     RspConnection.cpp \
                     RspConnection.h   \
-                    RspDummyMain.cpp  \
-                    RspDummyMain.h    \
+                    RspProxyMain.cpp  \
+                    RspProxyMain.h    \
                     RspPacket.cpp     \
                     RspPacket.h       \
                     SimProc.cpp       \

@@ -4,7 +4,7 @@
 #
 # Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 #
-# This file is part of the dummy GDB RSP server in SystemC
+# This file is part of the Embecosm Proxy GDB RSP server
 # 
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the Free
@@ -22,7 +22,7 @@
 
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT([rsp-dummy], [0.1], [support@embecosm.com])
+AC_INIT([embecosm-esp7-rsp-proxy], [1.0], [support@embecosm.com])
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADERS([config.h])
 

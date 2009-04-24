@@ -1,6 +1,6 @@
 # Makefile.am -- Documentation automake configuration file
 #
-# Copyright (C) 2008 Embecosm Limited
+# Copyright (C) 2009 Embecosm Limited
 #
 # Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 #
@@ -20,9 +20,9 @@
 # with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-info_TEXINFOS = rsp-dummy.texi
+info_TEXINFOS = rsp-proxy.texi
 
 # Included files in the texinfo source
-rsp_dummy_TEXINFOS = config.texi  \
+rsp_proxy_TEXINFOS = config.texi  \
 	             fdl-1.2.texi \
 		     version.texi

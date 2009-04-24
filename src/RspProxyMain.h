@@ -1,6 +1,5 @@
 // ----------------------------------------------------------------------------
-
-// SystemC system wide declarations
+// System wide declarations
 
 // Copyright (C) 2009  Embecosm Limited <info@embecosm.com>
 
@@ -36,13 +35,5 @@
 
 //! Number of bytes in a word
 #define  BYTES_PER_WORD  (sizeof (uint32_t) / sizeof (uint8_t))
-
-//! Default port for RSP to listen on
-#define DEFAULT_RSP_PORT  51000
-
-//! Maximum size of a RSP packet is used to return the value of all the
-//! registers, each of which takes 8 chars. There are a total of 32 GPRs plus
-//! PPC, SR and NPC. Plus one byte for end of string marker.
-#define RSP_MAX_PKT_SIZE ((32 + 3) * 8 + 1)
 
 #endif	// ORPSOC_MAIN__H

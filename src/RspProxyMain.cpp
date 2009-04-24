@@ -1,6 +1,5 @@
 // ----------------------------------------------------------------------------
-
-// SystemC main program
+// Main program.
 
 // Copyright (C) 2009  Embecosm Limited <info@embecosm.com>
 
@@ -22,8 +21,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // ----------------------------------------------------------------------------
-
-// SystemC main program
 
 // $Id$
 

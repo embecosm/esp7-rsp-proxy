@@ -1,11 +1,11 @@
 \input texinfo   @c -*- texinfo -*-
-@c Embecosm RSP Dummy Server Manual
+@c Embecosm Proxy GDB RSP Server Manual
 @c
 @c Copyright (C) 2009 Embecosm Limited
 @c
 @c Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 @c
-@c This file is part of the dummy GDB RSP server in SystemC
+@c This file is part of the Embecosm Proxy GDB RSP server
 @c
 @c This program is free software; you can redistribute it and/or modify it
 @c under the terms of the GNU General Public License as published by the Free
@@ -22,17 +22,17 @@
 @c
 @c $Id$
 @c
-@setfilename rsp-dummy.info
+@setfilename rsp-proxy.info
 @afourpaper
 @include version.texi
 @include config.texi
 @dircategory Embedded development
 @direntry
-* Rsp-dummy: The Embecosm RSP Dummy Server
+* Rsp-proxy: The Embecosm Proxy GDB RSP Server
 @end direntry
 
 @copying
-This file documents the Embecosm RSP Dummy Server, @value{RSPDUMMY}.
+This file documents the Embecosm Proxy GDB RSP Server, @value{RSPPROXY}.
 
 Copyright @copyright{} 2009 Embecosm Limited.
 
@@ -47,16 +47,17 @@ Free Documentation License''.
 @end copying
 
 @setchapternewpage on
-@settitle The Embecosm RSP Dummy User Guide
+@settitle The Embecosm Proxy GDB RSP Server User Guide
 
 @syncodeindex fn cp
 @syncodeindex vr cp
 
 @titlepage
-@title The Embecosm RSP Dummy User Guide
+@title The Embecosm Proxy GDB RSP Server
+@subtitle User Guide
 @author Jeremy Bennett
 @author Embecosm Limited
-@author Issue 1 for @value{RSPDUMMY} @value{VERSION}
+@author Issue 1 for @value{RSPPROXY} @value{VERSION}
 
 @page
 @vskip 0pt plus 1filll
@@ -72,8 +73,8 @@ Published by Embecosm Limited
 @c not for TeX).  Existing GNU manuals seem inconsistent on this point.
 @top Scope of this Document
 
-This document is the user guide for @value{RSPDUMMY}, the Embecosm RSP
-Dummy Server.
+This document is the user guide for @value{RSPPROXY}, the Embecosm Proxy
+GDB RSP Server.
 
 @menu
 * About::
@@ -86,18 +87,18 @@ Dummy Server.
 @end menu
 
 @node About
-@chapter About the Embecosm RSP Dummy Server
+@chapter About the Embecosm Proxy GDB RSP Server
 
-@value{RSPDUMMY} provides a server interface to allow GNU Debugger
+@value{RSPPROXY} provides a server interface to allow GNU Debugger
 clients for remote targets (typical of the embedded world) to be tested
 before the actual target is available.
 
 Typically such targets are provided as models or interfaces to real
 silicon, and availability of a working target is the limiting step on
-delivery. The @value{RSPDUMMY} allows the maximum testing to be carried
+delivery. The @value{RSPPROXY} allows the maximum testing to be carried
 out before the target is available, thus reducing time to delivery.
 
-@value{RSPDUMMY} models the target as a bank of registers and one or
+@value{RSPPROXY} models the target as a bank of registers and one or
 more banks of (non-overlapping) memory. This is initialized from a
 configuration file and then accessed and modified through any RSP
 packets which access registers or memory.
@@ -106,7 +107,7 @@ If the user requests, full tracing of packets can be enabled.
 
 @node Installation
 @chapter Installation
-@cindex installing @value{RSPDUMMY}
+@cindex installing @value{RSPPROXY}
 
 Installation follows standard GNU protocols.
 
@@ -124,9 +125,9 @@ Unpack the software and create a @emph{separate} directory in which to
 build it:
 
 @example
-@kbd{tar jxf rsp-dummy-@value{VERSION}.tar.bz2}
-@kbd{mkdir builddir_rsp-dummy}
-@kbd{cd builddir_rsp-dummy}
+@kbd{tar jxf embecosm-esp7-rsp-proxy-@value{VERSION}.tar.bz2}
+@kbd{mkdir build-rsp-proxy}
+@kbd{cd build-rsp-proxy}
 @end example
 
 @node Configuring the Build
@@ -151,12 +152,12 @@ The tool is then built with:
 
 The main installation directory should have been specified using
 @code{--prefix} at configuration time. These commands will install the
-@value{RSPDUMMY} tool in the @file{bin} sub-directory, 
+@value{RSPPROXY} tool in the @file{bin} sub-directory, 
 the example in the @file{share} sub-directory and this documentation in
 @command{info} format in the @file{share/info} sub-directory.
 
 @quotation Note
-Testing @value{RSPDUMMY} with @kbd{make check} is not yet supported.
+Testing @value{RSPPROXY} with @kbd{make check} is not yet supported.
 @end quotation
 
 The documentation may be created and installed in alternative formats (PDF,
@@ -170,7 +171,7 @@ Postscript, DVI, HTML) with for example:
 @node Known Issues
 @section Known Problems and Issues
 
-The following problems and issues are known about with @value{RSPDUMMY}
+The following problems and issues are known about with @value{RSPPROXY}
 @value{VERSION}. Notify other issues by email to
 @url{mailto:support@@embecosm.com}.
 
@@ -182,22 +183,22 @@ There is no check that all the registers have been specified.
 
 @node Usage
 @chapter Usage
-@cindex running @value{RSPDUMMY}
+@cindex running @value{RSPPROXY}
 
 The general form of the command is:
 
 @example
-rsp-dummy @var{config-file} @var{port} [trace]
+rsp-proxy @var{config-file} @var{port} [trace]
 @end example
 
 The @var{config-file} is a file specifying the initial configuration of
-the dummy. The port is the TCP/IP port on which the server should
+the proxy. The port is the TCP/IP port on which the server should
 listen. If the optional final @code{trace} argument is specified, the
 server will report on each RSP packet it sends and receives.
 
 @node Configuration
 @chapter Configuration
-@cindex configuring @value{RSPDUMMY}
+@cindex configuring @value{RSPPROXY}
 
 The configuration file describes an initial state of the CPU registers
 and Memory. Its syntax is:
@@ -294,7 +295,7 @@ An example configuration file, @file{or1k.cfg} may be found in the
 
 @node  GNU Free Documentation License
 @chapter GNU Free Documentation License
-@cindex license for @value{RSPDUMMY}
+@cindex license for @value{RSPPROXY}
 
 @include fdl-1.2.texi
 

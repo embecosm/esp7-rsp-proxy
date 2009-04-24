@@ -216,9 +216,6 @@ RspConnection::isConnected ()
 //! for use with GDB 6.8 or later. Sequence numbers were removed from the RSP
 //! standard at GDB 5.0.
 
-//! Since this is SystemC, if we hit something that is not a packet and
-//! requires a restart/retransmission, we wait so another thread gets a lookin.
-
 //! @param[in] pkt  The packet for storing the result.
 
 //! @return  TRUE to indicate success, FALSE otherwise (means a communications
@@ -356,9 +353,6 @@ RspConnection::getPkt (RspPacket *pkt)
 //! by a '$', followed by a '#' and a one byte checksum. '$', '#', '*' and '}'
 //! are escaped by preceding them with '}' and then XORing the character with
 //! 0x20.
-
-//! Since this is SystemC, if we hit something that requires a
-//! restart/retransmission, we wait so another thread gets a lookin.
 
 //! @param[in] pkt  The Packet to transmit
 
