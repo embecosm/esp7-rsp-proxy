@@ -81,6 +81,7 @@ GDB RSP Server.
 * Installation::
 * Usage::
 * Configuration::
+* Example::
 
 * GNU Free Documentation License::  The license for this documentation
 * Index::
@@ -179,6 +180,9 @@ The following problems and issues are known about with @value{RSPPROXY}
 @item
 There is no check that all the registers have been specified.
 
+@item
+A word is assumed to be 4 bytes
+
 @end itemize
 
 @node Usage
@@ -196,12 +200,215 @@ the proxy. The port is the TCP/IP port on which the server should
 listen. If the optional final @code{trace} argument is specified, the
 server will report on each RSP packet it sends and receives.
 
+The program acts as a RSP server, and will respond to RSP packets from a
+GDB client, using the information from the configuration file.
+
 @node Configuration
 @chapter Configuration
 @cindex configuring @value{RSPPROXY}
 
 The configuration file describes an initial state of the CPU registers
-and Memory. Its syntax is:
+and Memory
+
+@menu
+* General Format::
+* Specifying Machine Properties::
+* Specifying Registers::
+* Specifying Memory Blocks::
+* Formal Syntax::
+@end menu
+
+@node General Format
+@section General Format
+
+The configuration file consists of three sections.
+
+@itemize @bullet
+@item
+A description of the machine properties, introduced by the keyword @code{NAME}.
+
+@item
+A description of the registers and their initial state, introduced by
+the keyword @code{REGISTERS}.
+
+@item
+A description of a memory block and its initial values, introduced by
+the keywords @code{BYTE MEMORY} or @code{WORD MEMORY}. This block may
+occur several times to describe multiple blocks, such as program memory,
+stack memory and static data.
+@end itemize
+
+The configuration is in free format. Comments may be introduced, C++
+style, by @code{//}.
+
+@quotation Note
+The C style quotation @code{/*} ... @code{*/} is @emph{not} supported
+@end quotation
+
+@node Specifying Machine Properties
+@section Specifying Machine Properties
+
+The machine properties section must appear first. The keyword, @code{NAME},
+is followed by a parenthesized, comma separate list containing a textual
+name for this configuration (in double quotation marks) and the
+endianness of the target specified by the keywords @code{BIG ENDIAN} or
+@code{LITTLE ENDIAN}.
+
+For example the configuration of a big endian OpenRISC 1000 target could
+be specified as:
+
+@example
+NAME ( "OpenRISC 1000", BIG ENDIAN)
+@end example
+
+@node Specifying Registers
+@section Specifying Registers
+
+The registers are specified immediately after the machine
+properties. The section is introduced by the keyword @code{REGISTERS}
+followed by the number of registers in parenthesis.
+
+This number should match the number of @dfn{real} registers specified in
+the GDB client's architecture definition. I.e not including any
+pseudo-registers. For example in the OpenRISC 1000 architecture, the
+real registers that GDB knows about are the 32 general purpose
+registers, the Previous Program Counter, the Next Program Counter and
+the Supervision Register, so its register specification starts as
+follows.
+
+@example
+REGISTERS (35)
+@end example
+
+This declaration is followed by a comma separated triple in braces
+(@code{@{} and @code{@}}) for each register. The triple specifies a name
+of the register (in double quotes), its width in bits and its initial
+value. The registers must be specified in the same order that they are
+specified in the GDB client architecture.
+
+The following example specifies the OpenRISC 1000 registers for a
+program about the execute the instruction at location 0x1030, with a
+stack pointer at 0x7eb4 and frame pointer at 0x7ebc, and return address
+(in the link register) of 0x12b0.
+
+@example
+REGISTERS ( 35 )
+{ "gpr0", 32, 0 }               // Always zero
+{ "gpr1", 32, 0x7eb4 }          // Stack pointer
+{ "gpr2", 32, 0x7ebc }          // Frame pointer
+{ "gpr3", 32, 0 }               // Start of argument registers
+{ "gpr4", 32, 0 }
+{ "gpr5", 32, 0 }
+{ "gpr6", 32, 0 }
+{ "gpr7", 32, 0 }
+{ "gpr8", 32, 0 }               // End of argument registers
+{ "gpr9", 32, 0x12b0 }          // Link register
+{ "gpr10", 32, 0 }
+
+... More general purpose registers initialized to zero ...
+
+{ "gpr31", 32, 0 }
+{ "ppc",   32, 0x102c }         // Previous program counter
+{ "npc",   32, 0x1030 }         // Next program counter
+{ "sr",    32, 0 }              // Supervision register
+@end example
+
+The bit size and initial value may be specified in octal, decimal or
+hexadecimal using the conventional C/C++ notation.
+
+@node Specifying Memory Blocks
+@section Specifying Memory Blocks
+
+The specification of memory blocks follows the machine description and
+register specification. Multiple blocks may be specified.
+
+Memory is assumed to be byte addressed. It may be initialized as either
+bytes or words (in which case the endianness is taken into account).
+
+@subsection Specifying Memory in Bytes
+
+Byte memory is specified by the keywords @code{BYTE MEMORY} followed by
+a comma separated list within parentheses specifying the start address
+of the memory and its size in bytes.
+
+For example a 256 byte memory at location 0x8000 would be specified as
+follows.
+
+@example
+BYTE MEMORY (0x8000, 256)
+@end example
+
+This declation is optionally followed by a comma separated list of bytes
+giving initial values of locations. Not all (or any) locations need be
+specified. Any unspecified will be uninitialized. There may not be more
+bytes specified than the size of the memory. Thus the first 12 bytes of
+the memory specified at location 0x8000 could be set to the ASCII
+representation of C string @code{"Hello World"} as follows.
+
+@example
+BYTE MEMORY (0x8000, 256)
+0x48, 0x65, 0x6c, 0x6c, 0x6f,
+0x20,
+0x57, 0x6f, 0x72, 0x6c, 0x64,
+0x00
+@end example
+
+The byte list ends at the end of file, or the start of the next memory
+block specification.
+
+@subsection Specifying Memory in Words
+
+Word memory is specified by the keywords @code{WORD MEMORY} followed by
+a comma separated list within parentheses specifying the start address
+of the memory and its size in bytes.
+
+@quotation Note
+The size is still in @emph{bytes}, even though this is word memory.
+@end quotation
+
+For example a 0x3a0 byte long memory at location 0x1000 would be specified as
+follows.
+
+@example
+WORD MEMORY (0x1000, 0x3a0)
+@end example
+
+This declation is optionally followed by a comma separated list of words
+giving initial values of locations. These will be stored in bytes of
+memory according to the endianness specified in the machine description.
+
+@quotation Note
+Words are assumed to be 4 bytes long. This is a limitation of the
+current implementation.
+@end quotation
+
+As with byte memory, not all (or any) locations need be specified. Any
+unspecified will be uninitialized. There may not be more words specified
+than the size of the memory. The memory specified at location 0x1000
+could be initialized with an OpenRISC 1000 program image as follows:
+
+@example
+WORD MEMORY (0x1000, 0x3a0)
+0x9c21fff8, 0xd4011000, 0x9c410008, 0xd7e21ffc,
+0x15000001, 0x84410000, 0x44004800, 0x9c210008,
+0x9c21fff8, 0xd4011000, 0x9c410008, 0xd7e21ffc,
+0x15000004, 0x84410000, 0x44004800, 0x9c210008,
+
+... lots more similar ...
+
+0x07ffffb0, 0x15000000, 0x9c60002a, 0x07ffff74,
+0x15000000, 0x18600000, 0xa86313bd, 0x07ffffa9,
+0x15000000, 0x07ffffe3, 0x15000000, 0x8562fffc,
+0x85210000, 0x84410004, 0x44004800, 0x9c21000c
+@end example
+
+The word list ends at the end of file, or the start of the next memory
+block specification.
+
+@node Formal Syntax
+@section Formal Syntax
+
+The syntax of the configuration file in Backus-Naur Form (BNF) is:
 
 @multitable {@var{memoryClauseList}} {->} {@var{memoryClause} | @var{memoryClause} @var{memoryClauseList}}
 
@@ -292,6 +499,227 @@ decimal, @code{0o} for octal and @code{0b} for binary.
 
 An example configuration file, @file{or1k.cfg} may be found in the
 @file{share} directory of the installation.
+
+@node Example
+@chapter Example
+
+The @code{example} directory within the distribution contains an example
+configuration file, for a big-endian OpenRISC 1000. It represents the target
+during the execution of a simple test program.
+
+@menu
+* Overview:;
+* Example Configuration File::
+* Typical Output::
+@end menu
+
+@node Overview
+@section Overview
+
+The main source code file, @code{hello.c} defines a program to print out
+some strings and perform a simple calculation.
+
+@example
+#include "utils.h"
+
+void level2() {
+  simexit( 42 );
+}
+
+void level1() {
+  level2();
+}
+
+main()
+{
+  simputs ("Hello World!\n");
+  simputs ("The answer is ");
+  simputn (6 * 7);
+  simputs ("\n");
+  level1();
+}
+@end example
+
+This program runs under the control of a simple bootloader, stored at
+the reset vector location, 0x100.
+
+@example
+        .org    0x100           # The reset routine goes at 0x100
+
+        .global _start
+_start:
+        l.addi  r1,r0,0x7f00    # Set SP to value 0x7f00
+        l.addi  r2,r1,0x0       # FP and SP are the same
+        l.mfspr r3,r0,17        # Get SR value
+        l.ori   r3,r3,0x2       # Set TT exception enable bit
+        l.jal   _main           # Jump to main routine
+        l.mtspr r0,r3,17        # Enable exceptions (DELAY SLOT)
+@end example
+
+The bootloadrt establishes a stack (falling for the OpenRISC 1000) at
+location 0x7f00.
+
+Simple utility functions provide character, string and number output to
+a monitor. One of these is @code{simputs}.
+
+@example
+void  simputs( char *str )
+{
+  int  i;
+
+  for( i = 0; str[i] != '\0' ; i++ ) {
+    simputc( (int)(str[i]) );
+  }
+}       /* simputs() */
+@end example
+
+The code can be compiled using the OpenRISC 1000 GNU tool chain. However
+for convenience a compiled image, @code{hello}, is provided with the
+distribution.
+
+The code is loaded at address 0x1000. In this example, the code for
+@code{main} starts at 0x1338, for @code{simputs} at 0x113c and for
+@code{simputc} at 0x1020.
+
+@node Example Configuration File
+@section Example Configuration File
+
+The example configuration file is in the file @file{or1k.cfg}. It
+represents the state of the target at the start of executing the code of
+@code{simputs}, following its first call from @code{main}.
+
+The stack frame is for @code{simputs}, with stack pointer 0x7eb4 and
+frame pointer 0x7ebc. The next instruction to be executed is at location
+0x1030 (immediately after the @code{simputs} function prologue). The
+return address, held in the link register, @code{gpr9}, is 0x12b0,
+within the code of @code{main}
+
+The machine description specifies this is an OpenRISC 1000 and
+big endian.
+
+@example
+NAME ( "OpenRISC 1000", BIG ENDIAN)
+@end example
+
+The register description specifies the 32 General Purpose Registers, the
+Next and Previous Program Counters and the Supervision Register. These
+are initialized to correspond to the program and stack described
+earlier.
+
+@example
+REGISTERS ( 35 )
+{ "gpr0", 32, 0 }               // Always zero
+{ "gpr1", 32, 0x7eb4 }          // Stack pointer
+{ "gpr2", 32, 0x7ebc }          // Frame pointer
+{ "gpr3", 32, 0 }               // Start of argument registers
+{ "gpr4", 32, 0 }
+{ "gpr5", 32, 0 }
+{ "gpr6", 32, 0 }
+{ "gpr7", 32, 0 }
+{ "gpr8", 32, 0 }               // End of argument registers
+{ "gpr9", 32, 0x12b0 }          // Link register
+{ "gpr10", 32, 0 }
+
+... More general purpose registers initialized to zero ...
+
+{ "gpr31", 32, 0 }
+{ "ppc",   32, 0x102c }         // Previous program counter
+{ "npc",   32, 0x1030 }         // Next program counter
+{ "sr",    32, 0 }              // Supervision register
+@end example
+
+There are three memory blocks.
+@itemize @bullet
+@item
+A block to specify the interrupt vectors, particularly the bootloader
+and the reset vector
+
+@item
+A block to specify the main body of the code to be loaded at address
+0x1000
+
+@item
+A block to specify the current values on the stack frame growing down
+from 0x7f00.
+
+@end itemize
+
+The interrupt vector block specifies 256 bytes of zeros, followed by the
+interrupt vector code. The remainder of the interrupt vectors can be
+unititialized, since we will not be analyzing them with GDB.
+
+@example
+WORD MEMORY (0x0, 0x1000)
+0x00000000, 0x00000000, 0x00000000, 0x00000000,
+0x00000000, 0x00000000, 0x00000000, 0x00000000,
+
+... 60 more similar lines ...
+
+0x00000000, 0x00000000, 0x00000000, 0x00000000,
+0x00000000, 0x00000000, 0x00000000, 0x00000000,
+0x9c207f00,                     // l.addi   r1,r0,0x7f00
+0x9c410000,                     // l.addi   r2,r1,0
+0xb4600011,                     // l.mfspr  r3,r0,0x11
+0xa8630002,                     // l.ori    r3,r3,0x2
+0x0400048a,                     // l.jal    <main>
+0xc0001811                      // l.mtspr  r0,r3,0x11
+@end example
+
+The main program image is a straight word dump in hex of the program
+image.
+
+@example
+WORD MEMORY (0x1000, 0x3a0)
+0x9c21fff8, 0xd4011000, 0x9c410008, 0xd7e21ffc,
+0x15000001, 0x84410000, 0x44004800, 0x9c210008,
+0x9c21fff8, 0xd4011000, 0x9c410008, 0xd7e21ffc,
+0x15000004, 0x84410000, 0x44004800, 0x9c210008,
+
+... lots more similar ...
+
+0x07ffffb0, 0x15000000, 0x9c60002a, 0x07ffff74,
+0x15000000, 0x18600000, 0xa86313bd, 0x07ffffa9,
+0x15000000, 0x07ffffe3, 0x15000000, 0x8562fffc,
+0x85210000, 0x84410004, 0x44004800, 0x9c21000c
+@end example
+
+The stack frame shows the top 96 words of the stack, which is sufficient
+to include the stack frames of @code{main} and @code{simputs}. Any
+values expected to have been stored on the frame, including frame
+pointer links and return addresses must be initialized correctly.
+
+@example
+WORD MEMORY (0x7ea0, 96)
+0x38df8cdc,
+0x310063c5,
+0x0dbc3ba7,
+0xc50e4076,
+0x9e5be4e0,
+0x00007ef4,
+0x00000048,
+0x00001358,
+0x00007f00,
+0x33f3818c,
+0x3240afbc,
+0x00000048,
+0x00000000,
+0x000013a0,
+0x000013a0,
+0x00000048,
+0x00000000,
+0x000013a0,
+0x000013a0,
+0x00000000,
+0x000013a0,
+0x00000118,
+0x00007f00,
+0xd4e6042c
+@end example
+
+@node Typical Output
+@section Typical Output
+
+
 
 @node  GNU Free Documentation License
 @chapter GNU Free Documentation License
