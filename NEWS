@@ -7,9 +7,15 @@ $Id$
 NEWS
 ====
 
+Version 1.1 published 30 June, 2009.
+- comprehensive user guide added
+- RSP packet trace output tidied
+
 Version 1.0 published 12 April, 2009.
+- first release, but with minimal user guide
 
 Version 0.1 completed 4 April, 2009.
+- experimental alpha version
 
 COPYING
 =======

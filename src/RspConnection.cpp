@@ -428,7 +428,7 @@ RspConnection::putPkt (RspPacket *pkt)
 
   if (traceOnP)
     {
-      cout << "putPkt: " << *pkt << endl;
+      cout << "RSP trace: putPkt: " << *pkt << endl;
     }
 
   return  true;
