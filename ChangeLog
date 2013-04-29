@@ -1,16 +1,18 @@
-		    Embecosm GNU Debugger Proxy RSP Server
-		    ======================================
+2009-04-12  Jeremy Bennett  <jeremy.bennett@embecosm.com>
 
-$Id$
+	* .gitignore: New file.
+	* README.md: Renamed from README an updated to make best use of
+	MarkDown.
 
-12-Apr-2009  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+2009-04-09  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+
 	* src/RspProxyMain.cpp, src/RspProxyMain.h: created by renaming
 	src/RspDummyMain.cpp and src/RspDummyMain.h respectively.
 	* src/RspDummyMain.cpp, src/RspDummyMain.h: Deleted
 	* doc/rsp-proxy.texi. Created by renaming doc/rsp-dummy.texi.
 	* doc/rsp-dummy.texi. Deleted.
 
- 9-Apr-2009  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+2009-04-09  Jeremy Bennett  <jeremy.bennett@embecosm.com>
 
 	* AUTHORS, ChangeLog, configure.ac, COPYING, INSTALL, Makefile.am,
 	* NEWS, OrpsocMain.cpp, README, doc/config.texi, doc/fdl-1.2.texi,
@@ -25,10 +27,3 @@ $Id$
 	* src/RspDummyMain.h, src/RspPacket.cpp, src/RspPacket.h,
 	* src/SimProc.cpp, src/SimProc.h, src/Utils.cpp,
 	* src/Utils.h: Initial versions created.
-
-
-COPYING
-=======
-
-This software is licensed under the GNU General Public License (GPL). Full
-details of the GPL can be found in the file COPYING

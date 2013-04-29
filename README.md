@@ -1,21 +1,18 @@
 		    Embecosm GNU Debugger Proxy RSP Server
 		    ======================================
 
-$Id$
-
-
-ABOUT
+About
 =====
 
-This is a proxy RSP server. It allows GDB clients to test their capability of
-reading and writing registers and memory over RSP.
+This is a proxy Remote Serial Protocol server. It allows GDB clients to test
+their capability of reading and writing registers and memory over RSP.
 
-INSTALLATION
+Installation
 ============
 
 Standard GNU installation instructions apply. See the file INSTALL for details.
 
-COPYING
+Copying
 =======
 
 This software is licensed under the GNU General Public License (GPL). Full
