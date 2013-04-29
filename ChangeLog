@@ -1,5 +1,16 @@
 2009-04-12  Jeremy Bennett  <jeremy.bennett@embecosm.com>
 
+	* src/RspConnection.cpp: include unistd.h, needed for close ().
+
+2009-04-12  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+
+	* README: Created as a symbolic link to README.md to keep autoconf
+	happy.
+	* README.md: Added instructions about autoreconf.
+	* INSTALL: Replaced with standard installation instructions.
+
+2009-04-12  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+
 	* README.md: Even better use of MarkDown!
 
 2009-04-12  Jeremy Bennett  <jeremy.bennett@embecosm.com>
