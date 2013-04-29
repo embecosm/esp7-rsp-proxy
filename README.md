@@ -7,10 +7,15 @@ About
 This is a proxy Remote Serial Protocol server. It allows GDB clients to test
 their capability of reading and writing registers and memory over RSP.
 
-Installation
-------------
+Building and installing
+-----------------------
 
-Standard GNU installation instructions apply. See the file INSTALL for details.
+This system uses autotools to control building and installing. You will need *autoconf*, *automake* and *libtool* installed. Then run:
+
+    autoreconf -f -i
+
+Thereafter standard GNU installation instructions apply. See the file INSTALL
+for details.
 
 Copying
 -------
