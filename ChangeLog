@@ -1,5 +1,9 @@
 2009-04-12  Jeremy Bennett  <jeremy.bennett@embecosm.com>
 
+	* README.md: Even better use of MarkDown!
+
+2009-04-12  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+
 	* .gitignore: New file.
 	* README.md: Renamed from README an updated to make best use of
 	MarkDown.
