@@ -1,6 +1,6 @@
 // GDB RSP server: implementation
 
-// Copyright (C) 2009  Embecosm Limited <info@embecosm.com>
+// Copyright (C) 2009, 2013  Embecosm Limited <info@embecosm.com>
 
 // Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
@@ -21,11 +21,12 @@
 
 // ----------------------------------------------------------------------------
 
-// $Id$
-
 #include <iostream>
 #include <iomanip>
 #include <cstring>
+#include <string>
+#define __STDC_FORMAT_MACROS
+#include <inttypes.h>
 
 #include "GdbServer.h"
 #include "Utils.h"
@@ -35,6 +36,8 @@ using std::cerr;
 using std::dec;
 using std::endl;
 using std::hex;
+using std::string;
+
 
 //-----------------------------------------------------------------------------
 //! Constructor for the GDB RSP server.
@@ -755,6 +758,29 @@ GdbServer::rspQuery ()
       pkt->packStr ("");
       rsp->putPkt (pkt);
     }
+  else if (0 == strncmp ("qAttached", pkt->data, strlen ("qAttached")))
+    {
+      // Assume we are attaching to an existing process
+      pkt->packStr ("1");
+      rsp->putPkt (pkt);
+    }
+  else if ((0 == strncmp ("qTMinFTPILen", pkt->data, strlen ("qTMinFTPILen")))
+	   || (0 == strncmp ("qTStatus", pkt->data, strlen ("qTStatus")))
+	   || (0 == strncmp ("qTP:", pkt->data, strlen ("qTP:")))
+	   || (0 == strncmp ("qTV:", pkt->data, strlen ("qTV:")))
+	   || (0 == strncmp ("qTfP", pkt->data, strlen ("qTfP")))
+	   || (0 == strncmp ("qTsP", pkt->data, strlen ("qTsP")))
+	   || (0 == strncmp ("qTfV", pkt->data, strlen ("qTfV")))
+	   || (0 == strncmp ("qTsV", pkt->data, strlen ("qTsV")))
+	   || (0 == strncmp ("qTfSTM", pkt->data, strlen ("qTfSTM")))
+	   || (0 == strncmp ("qTsSTM", pkt->data, strlen ("qTsSTM")))
+	   || (0 == strncmp ("qTSTMat:", pkt->data, strlen ("qTSTMat:")))
+	   || (0 == strncmp ("qTBuffer:", pkt->data, strlen ("qTBuffer:"))))
+    {
+      // All tracepoint features are not supported.
+      pkt->packStr ("");
+      rsp->putPkt (pkt);
+    }
   else
     {
       cerr << "Unrecognized RSP query: ignored" << endl;
@@ -800,12 +826,20 @@ GdbServer::rspSet ()
       pkt->packStr ("");
       rsp->putPkt (pkt);
     }
-  else if ((0 == strncmp ("QTDP",    pkt->data, strlen ("QTDP")))   ||
-	   (0 == strncmp ("QFrame",  pkt->data, strlen ("QFrame"))) ||
-	   (0 == strcmp  ("QTStart", pkt->data))                    ||
-	   (0 == strcmp  ("QTStop",  pkt->data))                    ||
-	   (0 == strcmp  ("QTinit",  pkt->data))                    ||
-	   (0 == strncmp ("QTro",    pkt->data, strlen ("QTro"))))
+  else if ((0 == strncmp ("QTDP",       pkt->data, strlen ("QTDP")))
+	   || (0 == strncmp ("QTDV:",      pkt->data, strlen ("QTDV:")))
+	   || (0 == strncmp ("QFrame",     pkt->data, strlen ("QFrame")))
+	   || (0 == strcmp  ("QTStart",    pkt->data))
+	   || (0 == strcmp  ("QTStop",     pkt->data))
+	   || (0 == strncmp ("QTEnable:",  pkt->data, strlen ("QTEnable:")))
+	   || (0 == strncmp ("QTDisable:", pkt->data, strlen ("QTDisable:")))
+	   || (0 == strcmp  ("QTinit",     pkt->data))
+	   || (0 == strncmp ("QTro",       pkt->data, strlen ("QTro")))
+	   || (0 == strncmp ("QTDisconnected:", pkt->data,
+			     strlen ("QTDisconnected:")))
+	   || (0 == strncmp ("QTSave:",    pkt->data, strlen ("QTSave:")))
+	   || (0 == strncmp ("QTBuffer:",  pkt->data, strlen ("QTBuffer:")))
+	   || (0 == strncmp ("QTNotes:",   pkt->data, strlen ("QTNotes:"))))
     {
       // All tracepoint features are not supported. This reply is really only
       // needed to 'QTDP', since with that the others should not be
@@ -994,7 +1028,8 @@ GdbServer::rspRemoveMatchpoint ()
   uint8_t  *instrVec;			// Instruction as byte vector
 
   // Break out the instruction
-  if (3 != sscanf (pkt->data, "z%1d,%lx,%1d", (int *)&type, &addr, &len))
+  if (3 != sscanf (pkt->data, "z%1d,%" SCNx32 ",%1d", (int *)&type, &addr,
+		   &len))
     {
       cerr << "Warning: RSP matchpoint deletion request not "
 	   << "recognized: ignored" << endl;
@@ -1171,10 +1206,11 @@ GdbServer::rspInsertMatchpoint ()
   uint8_t  *instrVec;			// Instruction as byte vector
 
   // Break out the instruction
-  if (3 != sscanf (pkt->data, "Z%1d,%lx,%1d", (int *)&type, &addr, &len))
+  if (3 != sscanf (pkt->data, "Z%1d,%" SCNx32 ",%1d", (int *)&type, &addr,
+		   &len))
     {
       cerr << "Warning: RSP matchpoint insertion request not "
-	   << "recognized: ignored" << endl;
+	   << " recognized: ignored" << endl;
       pkt->packStr ("E01");
       rsp->putPkt (pkt);
       return;

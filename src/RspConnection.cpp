@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------------------
 // Remote Serial Protocol connection: implementation
 
-// Copyright (C) 2009  Embecosm Limited <info@embecosm.com>
+// Copyright (C) 2009, 2013  Embecosm Limited <info@embecosm.com>
 
 // Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 

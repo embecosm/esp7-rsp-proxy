@@ -1,25 +1,40 @@
-2009-04-12  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+2012-04-30  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+
+	* src/GdbServer.cpp: Include inttypes.h, first defining
+	__STDC_FORMAT_MACROS so we get the printf/scanf macros. Update
+	copyright date.
+	(rspQuery): Add qAttached and all tracepoint packets.
+	(rspSet): Add QTDV, QTEnable, QTDisable, QTDisconnected, QTSave,
+	QTBuffer and QTNotes to list of tracepoint packets which are ignored.
+	(rspRemoveMatchpoint, rspInsertMatchpoint): Use correct scanf
+	field for uint32_t.
+	* src/RspConnection.cpp: Update copyright date.
+	* src/SimProc.cpp: Update copyright date.
+	(parseSpecificMemoryClause): Use wordSize when
+	calling MemoryBlock for word array.
+
+2012-04-29  Jeremy Bennett  <jeremy.bennett@embecosm.com>
 
 	* src/RspConnection.cpp: include unistd.h, needed for close ().
 
-2009-04-12  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+2012-04-29  Jeremy Bennett  <jeremy.bennett@embecosm.com>
 
 	* README: Created as a symbolic link to README.md to keep autoconf
 	happy.
 	* README.md: Added instructions about autoreconf.
 	* INSTALL: Replaced with standard installation instructions.
 
-2009-04-12  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+2012-04-29  Jeremy Bennett  <jeremy.bennett@embecosm.com>
 
 	* README.md: Even better use of MarkDown!
 
-2009-04-12  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+2012-04-29  Jeremy Bennett  <jeremy.bennett@embecosm.com>
 
 	* .gitignore: New file.
 	* README.md: Renamed from README an updated to make best use of
 	MarkDown.
 
-2009-04-09  Jeremy Bennett  <jeremy.bennett@embecosm.com>
+2009-04-12  Jeremy Bennett  <jeremy.bennett@embecosm.com>
 
 	* src/RspProxyMain.cpp, src/RspProxyMain.h: created by renaming
 	src/RspDummyMain.cpp and src/RspDummyMain.h respectively.

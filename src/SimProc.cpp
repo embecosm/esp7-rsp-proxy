@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------------------
 // Simulated Processor: implementation
 
-// Copyright (C) 2009  Embecosm Limited <info@embecosm.com>
+// Copyright (C) 2009, 2013  Embecosm Limited <info@embecosm.com>
 
 // Contributor Jeremy Bennett <jeremy.bennett@embecosm.com>
 
@@ -1077,7 +1077,7 @@ SimProc::parseSpecificMemoryClause (ScannerObject  memoryType)
 	  uint32_t  wordSize  = byteSize / BYTES_PER_WORD;
 	  uint32_t *wordArray = new uint32_t [wordSize];
 	  parseMemoryValues (memoryType, (int)wordSize, (void *)wordArray);
-	  memList = new MemoryBlock (memList, baseAddr, byteSize, wordArray,
+	  memList = new MemoryBlock (memList, baseAddr, wordSize, wordArray,
 				     isLittleEndianP);
 	  delete [] wordArray;
 	}
