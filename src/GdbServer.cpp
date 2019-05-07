@@ -938,7 +938,7 @@ GdbServer::rspVpkt ()
     {
       cerr << "Warning: Unknown RSP 'v' packet type " << pkt->data
 	   << ": ignored" << endl;
-      pkt->packStr ("E01");
+      pkt->packStr ("");
       rsp->putPkt (pkt);
       return;
     }
