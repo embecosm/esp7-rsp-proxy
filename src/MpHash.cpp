@@ -142,7 +142,7 @@ MpHash::lookup (MpType    type,
 //! @param[out] instr  Location to place the instruction found. If NULL (the
 //!                    default) then the instruction is not written back.
 
-//! @return  TRUE if an entry was found and deleted
+//! @return  true if an entry was found and deleted
 bool
 MpHash::remove (MpType    type,
 		uint32_t  addr,

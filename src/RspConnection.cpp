@@ -105,7 +105,7 @@ RspConnection::~RspConnection ()
 
 //! The protocol used for communication is specified in OR1KSIM_RSP_PROTOCOL.
 
-//! @return  TRUE if the connection was established or can be retried. FALSE
+//! @return  true if the connection was established or can be retried. false
 //!          if the error was so serious the program must be aborted.
 //-----------------------------------------------------------------------------
 bool
@@ -195,7 +195,7 @@ RspConnection::rspClose ()
 //-----------------------------------------------------------------------------
 //! Report if we are connected to a client.
 
-//! @return  TRUE if we are connected, FALSE otherwise
+//! @return  true if we are connected, false otherwise
 //-----------------------------------------------------------------------------
 bool
 RspConnection::isConnected ()
@@ -219,7 +219,7 @@ RspConnection::isConnected ()
 
 //! @param[in] pkt  The packet for storing the result.
 
-//! @return  TRUE to indicate success, FALSE otherwise (means a communications
+//! @return  true to indicate success, false otherwise (means a communications
 //!          failure)
 //-----------------------------------------------------------------------------
 bool
@@ -357,7 +357,7 @@ RspConnection::getPkt (RspPacket *pkt)
 
 //! @param[in] pkt  The Packet to transmit
 
-//! @return  TRUE to indicate success, FALSE otherwise (means a communications
+//! @return  true to indicate success, false otherwise (means a communications
 //!          failure).
 //-----------------------------------------------------------------------------
 bool
@@ -445,7 +445,7 @@ RspConnection::putPkt (RspPacket *pkt)
 
 //! @param[in] c         The character to put out
 
-//! @return  TRUE if char sent OK, FALSE if not (communications failure)
+//! @return  true if char sent OK, false if not (communications failure)
 //-----------------------------------------------------------------------------
 bool
 RspConnection::putRspChar (char  c)
