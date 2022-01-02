@@ -193,6 +193,7 @@ SimProc::getRegSize (int  regNum,
     {
       cerr << "ERROR: Attempt to get size of invalid register " << regNum
 	   << endl;
+      return false;
     }
 }	// getRegSize ()
 
