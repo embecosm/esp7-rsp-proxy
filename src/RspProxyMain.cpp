@@ -71,6 +71,7 @@ main (int   argc,
 
   if(!cpu->init (configFile))
     {
+      delete cpu;
       exit (127);
     }
 
