@@ -30,10 +30,6 @@
 #include "RspPacket.h"
 
 
-//! The default service to use if port number = 0 and no service specified
-#define DEFAULT_RSP_SERVICE  "or1ksim-rsp"
-
-
 //-----------------------------------------------------------------------------
 //! Class implementing the RSP connection listener
 

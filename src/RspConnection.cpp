@@ -51,9 +51,6 @@ using std::hex;
 using std::setfill;
 using std::setw;
 
-// Define RSP_TRACE to turn on tracing of packets sent and received
-// #define RSP_TRACE
-
 
 //-----------------------------------------------------------------------------
 //! Constructor when using a port number
@@ -96,14 +93,8 @@ RspConnection::~RspConnection ()
 //! connections from a single GDB instance (we couldn't be talking to multiple
 //! GDBs at once!).
 
-//! The service is specified either as a port number in the Or1ksim
-//! configuration (parameter rsp_port in section debug, default 51000) or as a
-//! service name in the constant OR1KSIM_RSP_SERVICE.
-
 //! If there is a catastrophic communication failure, service will be
 //! terminated using sc_stop.
-
-//! The protocol used for communication is specified in OR1KSIM_RSP_PROTOCOL.
 
 //! @return  true if the connection was established or can be retried. false
 //!          if the error was so serious the program must be aborted.
