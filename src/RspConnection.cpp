@@ -468,7 +468,6 @@ RspConnection::putRspChar (char  c)
 	  if ((EAGAIN != errno) && (EINTR != errno))
 	    {
 	      cerr << "Warning: Failed to write to RSP client: "
-			<< "Closing client connection: "
 			<<  strerror (errno) << endl;
 	      return  false;
 	    }
@@ -516,7 +515,6 @@ RspConnection::getRspChar ()
 	  if (EINTR != errno)
 	    {
 	      cerr << "Warning: Failed to read from RSP client: "
-		   << "Closing client connection: "
 		   <<  strerror (errno) << endl;
 	      return  -1;
 	    }
