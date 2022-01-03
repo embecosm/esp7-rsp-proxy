@@ -163,7 +163,7 @@ private:
   void  parseMemoryParams (uint32_t &baseAddr,
 			   uint32_t &byteSize);
   void  parseMemoryValues (ScannerObject  memoryType,
-			   int            arraySize,
+			   uint32_t       arraySize,
 			   void          *memArray);
 
   // Parser support functions
