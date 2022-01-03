@@ -352,6 +352,7 @@ SimProc::parse ()
   parseErrorCount   = 0;
 
   ch     = -1;				// Init the char reader
+  prevCh = -1;
   nextCh = -1;				// No call to unreadChar () yet
   readChar ();
 
@@ -1910,6 +1911,7 @@ SimProc::unreadChar ()
     {
       nextCh = ch;			// Save to use again
       ch     = prevCh;			// Restore old ch
+      prevCh = -1;
     }
 
   if ('\n' == nextCh)			// Reduce the line number count
