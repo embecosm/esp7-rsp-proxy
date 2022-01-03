@@ -167,7 +167,7 @@ SimProc::getNumRegs ()
 bool
 SimProc::isValidReg (int  regNum)
 {
-  return  (0 <= regNum) && (regNum <= numRegs);
+  return  (0 <= regNum) && (regNum < numRegs);
 
 }	// isValidReg ()
 
@@ -352,6 +352,7 @@ SimProc::parse ()
   parseErrorCount   = 0;
 
   ch     = -1;				// Init the char reader
+  prevCh = -1;
   nextCh = -1;				// No call to unreadChar () yet
   readChar ();
 
@@ -1352,6 +1353,7 @@ SimProc::parseWarning (const char *format,
 
   va_start (args, format);
   parseMessage ("Warning: ", format, args);
+  va_end (args);
 
   parseWarningCount++;
 
@@ -1372,6 +1374,7 @@ SimProc::parseError (const char *format,
 
   va_start (args, format);
   parseMessage ("ERROR: ", format, args);
+  va_end (args);
 
   parseErrorCount++;
 
@@ -1391,13 +1394,11 @@ SimProc::parseError (const char *format,
 void
 SimProc::parseMessage (const char *preamble,
 		       const char *format,
-			...)
+		       va_list  args)
 {
   char     mess[MAX_PARSER_ERR_SIZE];
-  va_list  args;
 
   // Construct the message
-  va_start (args, format);
   snprintf (mess, MAX_PARSER_ERR_SIZE, format, args);
 
   cerr << lineNumber << ": " << preamble << mess << endl;
@@ -1416,9 +1417,6 @@ SimProc::parseMessage (const char *preamble,
 void
 SimProc::scan ()
 {
-  //! The most recent word read in.
-  char  word[LEXEME_MAX];
-
   // Get the next word from the input
   readWord ();
 
@@ -1533,7 +1531,7 @@ SimProc::extractNumberLval ()
 	  return;
 	  
 	case 'b':
-	  numberLval = str2base (2, 1);
+	  numberLval = str2base (2, 2);
 	  return;
 	  
 	default:
@@ -1879,8 +1877,7 @@ SimProc::readChar ()
       ch     = nextCh;			// We had an unreadch
       nextCh = -1;
     }
-
-  if (fh->get (c))
+  else if (fh->get (c))
     {
       ch = c;				// Char to int
     }
@@ -1898,7 +1895,7 @@ SimProc::readChar ()
 //-----------------------------------------------------------------------------
 //! Revert the next character to be analysed.
 
-//! Cannot affect the line number count.
+//! Can affect the line number count.
 
 //! @note This can only be called once between calls to readChar (). It is an
 //!       error if readChar () has yet to be called (when ::prevCh will be -1).
@@ -1914,6 +1911,7 @@ SimProc::unreadChar ()
     {
       nextCh = ch;			// Save to use again
       ch     = prevCh;			// Restore old ch
+      prevCh = -1;
     }
 
   if ('\n' == nextCh)			// Reduce the line number count
