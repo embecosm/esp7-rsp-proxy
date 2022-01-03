@@ -1531,7 +1531,7 @@ SimProc::extractNumberLval ()
 	  return;
 	  
 	case 'b':
-	  numberLval = str2base (2, 1);
+	  numberLval = str2base (2, 2);
 	  return;
 	  
 	default:
