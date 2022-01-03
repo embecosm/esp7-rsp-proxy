@@ -152,6 +152,7 @@ RspConnection::rspConnect ()
   if (-1 == clientFd)
     {
       cerr << "Warning: Failed to accept RSP client" << endl;
+      close (tmpFd);
       return  true;			// OK to retry
     }
 
