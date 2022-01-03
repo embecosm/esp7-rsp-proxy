@@ -1876,8 +1876,7 @@ SimProc::readChar ()
       ch     = nextCh;			// We had an unreadch
       nextCh = -1;
     }
-
-  if (fh->get (c))
+  else if (fh->get (c))
     {
       ch = c;				// Char to int
     }
@@ -1895,7 +1894,7 @@ SimProc::readChar ()
 //-----------------------------------------------------------------------------
 //! Revert the next character to be analysed.
 
-//! Cannot affect the line number count.
+//! Can affect the line number count.
 
 //! @note This can only be called once between calls to readChar (). It is an
 //!       error if readChar () has yet to be called (when ::prevCh will be -1).
