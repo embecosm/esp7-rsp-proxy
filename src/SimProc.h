@@ -177,7 +177,7 @@ private:
 		    ...);
   void  parseMessage (const char *preamble,
 		      const char *format,
-		      ...);
+		      va_list args);
 
   // Scanner (lexical analyser) for the processor description
   void  scan ();

@@ -1353,6 +1353,7 @@ SimProc::parseWarning (const char *format,
 
   va_start (args, format);
   parseMessage ("Warning: ", format, args);
+  va_end (args);
 
   parseWarningCount++;
 
@@ -1373,6 +1374,7 @@ SimProc::parseError (const char *format,
 
   va_start (args, format);
   parseMessage ("ERROR: ", format, args);
+  va_end (args);
 
   parseErrorCount++;
 
@@ -1392,13 +1394,11 @@ SimProc::parseError (const char *format,
 void
 SimProc::parseMessage (const char *preamble,
 		       const char *format,
-			...)
+		       va_list  args)
 {
   char     mess[MAX_PARSER_ERR_SIZE];
-  va_list  args;
 
   // Construct the message
-  va_start (args, format);
   snprintf (mess, MAX_PARSER_ERR_SIZE, format, args);
 
   cerr << lineNumber << ": " << preamble << mess << endl;
