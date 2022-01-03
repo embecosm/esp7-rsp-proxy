@@ -1416,9 +1416,6 @@ SimProc::parseMessage (const char *preamble,
 void
 SimProc::scan ()
 {
-  //! The most recent word read in.
-  char  word[LEXEME_MAX];
-
   // Get the next word from the input
   readWord ();
 
