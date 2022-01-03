@@ -42,6 +42,7 @@ public:
 
   // Constructor
   Register ();
+  ~Register ();
 
   // Various accessor functions
   void        set (const char *_name,

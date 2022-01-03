@@ -24,6 +24,7 @@
 // $Id$
 
 
+#include <cstdlib>
 #include <iostream>
 
 #include "RspProxyMain.h"
@@ -45,11 +46,25 @@ using std::hex;
 //-----------------------------------------------------------------------------
 Register::Register ()
 {
-  name  = "Unset";
+  name  = NULL;
   size  = -1;
   value = 0;
 
 }	// Register ()
+
+
+//-----------------------------------------------------------------------------
+//! Destructor
+
+//! Free up data structures
+//-----------------------------------------------------------------------------
+Register::~Register ()
+{
+  if (name)
+    {
+      free (const_cast<char *>(name));
+    }
+}	// ~Register ()
 
 
 //-----------------------------------------------------------------------------
