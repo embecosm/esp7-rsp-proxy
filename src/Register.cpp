@@ -26,7 +26,6 @@
 
 #include <iostream>
 
-#include "RspProxyMain.h"
 #include "Register.h"
 
 using std::cerr;
@@ -34,6 +33,9 @@ using std::dec;
 using std::endl;
 using std::hex;
 
+
+//! Maximum size of a register in bits
+#define MAX_REG_BITSIZE  (8 * sizeof(uint64_t))
 
 //-----------------------------------------------------------------------------
 //! Constructor

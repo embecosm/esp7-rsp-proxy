@@ -30,9 +30,6 @@
 #define ORPSOC_MAIN__H
 
 
-//! Maximum size of a register in bits
-#define  MAX_REG_BITSIZE  64
-
 //! Number of bytes in a word
 #define  BYTES_PER_WORD  (sizeof (uint32_t) / sizeof (uint8_t))
 
