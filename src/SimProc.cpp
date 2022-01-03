@@ -167,7 +167,7 @@ SimProc::getNumRegs ()
 bool
 SimProc::isValidReg (int  regNum)
 {
-  return  (0 <= regNum) && (regNum <= numRegs);
+  return  (0 <= regNum) && (regNum < numRegs);
 
 }	// isValidReg ()
 
