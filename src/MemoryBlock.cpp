@@ -36,8 +36,8 @@
 
 //! @param[in] _nextBlock  pointer to the next memory block (NULL if none)
 //! @param[in] _startAddr  start address of the region of memory represented.
-//! @param[in] numWords    Number of words in the array supplied
-//! @param[in] wordArray   Array of words with which to initialize the memory.
+//! @param[in] numBytes    Number of bytes in the array supplied
+//! @param[in] byteArray   Array of bytes with which to initialize the memory.
 //-----------------------------------------------------------------------------
 MemoryBlock::MemoryBlock (MemoryBlock *_nextBlock,
 			  uint32_t     _startAddr,
@@ -45,14 +45,9 @@ MemoryBlock::MemoryBlock (MemoryBlock *_nextBlock,
 			  uint8_t     *byteArray) :
   nextBlock (_nextBlock),
   startAddr (_startAddr),
-  byteSize (numBytes)
+  byteSize (numBytes),
+  memory (byteArray)
 {
-  memory = new uint8_t [byteSize];
-
-  for (int b = 0 ; b < numBytes ; b++ )
-    {
-      memory[b] = byteArray[b];
-    }
 }	// MemoryBlock ()
 
 
@@ -78,10 +73,9 @@ MemoryBlock::MemoryBlock (MemoryBlock *_nextBlock,
 			  bool         targetIsLittleEndianP) :
   nextBlock (_nextBlock),
   startAddr (_startAddr),
-  byteSize (numWords * BYTES_PER_WORD)
+  byteSize (numWords * BYTES_PER_WORD),
+  memory (reinterpret_cast<uint8_t *>(wordArray))
 {
-  memory = new uint8_t [byteSize];
-
   for (int w = 0 ; w < numWords ; w++ )
     {
       int       b   = w * BYTES_PER_WORD;

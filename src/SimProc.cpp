@@ -981,7 +981,7 @@ SimProc::parseSpecificMemoryClause (ScannerObject  memoryType)
   else
     {
       // Error recovery time. We should never get here, so if we do scan until
-      // we find either the start ofa new memory clause or EOF.
+      // we find either the start of a new memory clause or EOF.
       parseError ("Memory specification expected, but not found. Skipping.");
       skipBlock ();
       return;
@@ -1068,18 +1068,16 @@ SimProc::parseSpecificMemoryClause (ScannerObject  memoryType)
       if (SO_BYTE == memoryType)
 	{
 	  uint8_t *byteArray = new uint8_t [byteSize];
-	  parseMemoryValues (memoryType, (int)byteSize, (void *)byteArray);
+	  parseMemoryValues (memoryType, byteSize, byteArray);
 	  memList = new MemoryBlock (memList, baseAddr, byteSize, byteArray);
-	  delete [] byteArray;
 	}
       else
 	{
 	  uint32_t  wordSize  = byteSize / BYTES_PER_WORD;
 	  uint32_t *wordArray = new uint32_t [wordSize];
-	  parseMemoryValues (memoryType, (int)wordSize, (void *)wordArray);
+	  parseMemoryValues (memoryType, wordSize, wordArray);
 	  memList = new MemoryBlock (memList, baseAddr, wordSize, wordArray,
 				     isLittleEndianP);
-	  delete [] wordArray;
 	}
     }
 }	// parseSpecificMemoryClause ()
@@ -1192,13 +1190,13 @@ SimProc::parseMemoryParams (uint32_t &baseAddr,
 //-----------------------------------------------------------------------------
 void
 SimProc::parseMemoryValues (ScannerObject  memoryType,
-			    int            arraySize,
+			    uint32_t       arraySize,
 			    void          *memArray)
 {
   uint8_t  *byteArray = (uint8_t *)memArray;
   uint32_t *wordArray = (uint32_t *)memArray;
 
-  int  nextMem = 0;
+  uint32_t  nextMem = 0;
 
 #ifdef PARSE_DEBUG
   cout << "-- parseMemoryvalues" << endl;
@@ -1216,7 +1214,7 @@ SimProc::parseMemoryValues (ScannerObject  memoryType,
 	    {
 	      if (SO_BYTE == memoryType)
 		{
-		  byteArray[nextMem] = (uint32_t)numberLval;
+		  byteArray[nextMem] = (uint8_t)numberLval;
 		}
 	      else
 		{
