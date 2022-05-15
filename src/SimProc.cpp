@@ -809,6 +809,7 @@ SimProc::parseRegister (int  regNum)
       // Error recovery time. If we get a failure between braces, we just scan
       // to the end brace and return.
       parseError ("comma missing after name. Skipping register specification");
+      free (regName);
       skipBrace ();
       return;
     }
@@ -824,6 +825,7 @@ SimProc::parseRegister (int  regNum)
       // Error recovery time. If we get a failure between braces, we just scan
       // to the end brace and return.
       parseError ("Register size missing. Skipping register specification");
+      free (regName);
       skipBrace ();
       return;
     }
@@ -838,6 +840,7 @@ SimProc::parseRegister (int  regNum)
       // Error recovery time. If we get a failure between braces, we just scan
       // to the end brace and return.
       parseError ("comma missing after size. Skipping register specification");
+      free (regName);
       skipBrace ();
       return;
     }
@@ -853,6 +856,7 @@ SimProc::parseRegister (int  regNum)
       // Error recovery time. If we get a failure between braces, we just scan
       // to the end brace and return.
       parseError ("Register value missing. Skipping register specification");
+      free (regName);
       skipBrace ();
       return;
     }
@@ -874,6 +878,7 @@ SimProc::parseRegister (int  regNum)
 	  scan ();			// Skip unwanted symbol
 	}
 
+      free (regName);
       return;
     }
 
@@ -885,6 +890,7 @@ SimProc::parseRegister (int  regNum)
   else
     {
       parseError ("Too many registers specified: %d", regNum);
+      free (regName);
     }
 }	// parseRegister ()
 
